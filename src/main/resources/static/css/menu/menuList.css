@@ -18,9 +18,9 @@ body {
 }
 
 .mainframe {
-	width: 100%; // 이거 100%로 하면 커짐
+	width: 80%; // 이거 100%로 하면 커짐
 }
-.mainframe.after {
+.mainframe.smaller {
     width: 70%;
 }
 

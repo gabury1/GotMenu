@@ -74,15 +74,22 @@ function createList(object)
 }
 
 let mode = false;
-function getSummary()
+let nowNo = 0;
+function getSummary(number)
 {
-/*
-    $.ajax({
-    });
-*/
-    $(".mainframe").toggleClass('after');
     if(mode == false)
     {
+        mode = true;
+        nowNo = number;
+
+            $.ajax({
+                url:
+
+
+
+            });
+
+        $(".mainframe").toggleClass('smaller');
         $("#subframe").show();
     }
     else
@@ -92,3 +99,12 @@ function getSummary()
     mode = !mode;
 
 }
+
+function insertSummary(object)
+{
+
+
+
+
+}
+
