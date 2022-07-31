@@ -106,7 +106,7 @@ public class MenuController {
         {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
-            response.getWriter().println(menuService.getBoardList(target, keyword, pageNo));
+            response.getWriter().println(menuService.getMenuList(target, keyword, pageNo));
 
         }
         catch (IOException e) {
@@ -115,6 +115,21 @@ public class MenuController {
 
     }
 
+    @GetMapping("/{menuNo}")
+    public void getMenuInfo(HttpServletResponse response, @PathVariable("menuNo") int menuNo)
+    {
+        try
+        {
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json");
+            response.getWriter().println(menuService.getMenuInfo(menuNo));
+
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     @RequestMapping("/test")
     @ResponseBody

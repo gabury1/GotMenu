@@ -120,6 +120,10 @@ body {
 	height: 50px;
 	cursor: pointer;
 }
+.menuList-row.clicked{
+    background: #f0f0f0;
+}
+
 .menuList-row:hover {
     background: #f0f0f0;
 }

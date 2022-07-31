@@ -108,7 +108,7 @@ public class MenuService {
         return tmp;
     }
 
-    public String getBoardList(String target, String keyword, int pageNo)
+    public String getMenuList(String target, String keyword, int pageNo)
     {
         JSONObject object = new JSONObject();
 
@@ -163,6 +163,43 @@ public class MenuService {
 
         return object.toString();
     }
+
+    public JSONObject getMenuInfo(int menuNo)
+    {
+        JSONObject object = new JSONObject();
+        Menu menu = menuRepository.findByMenuNo(menuNo);
+
+        if(menu == null) return object;
+
+        // 데이터를 JSON에 담아 프론트에 전송송
+        object.put("menuNo", menu.getMenuNo());
+        object.put("composition", menu.getMenuComposition());
+        // 제대로 안나눠진 경우
+        try{
+            String[] nutritions = menu.getMenuDetail().split("\\/");  // \\<= 이거 안넣어주면 구분자까지 반환한다.
+            object.put("calorie", nutritions[0]); // 칼로리
+            object.put("carbohydrate", nutritions[1]); // 탄수화물
+            object.put("protein", nutritions[2]); // 단백질
+            object.put("fat", nutritions[3]); // 지방
+        }
+        catch (RuntimeException e)
+        {
+            object.put("calorie", 0); // 칼로리
+            object.put("carbohydrate", 0); // 탄수화물
+            object.put("protein", 0); // 단백질
+            object.put("fat", 0); // 지방
+        }
+
+        object.put("description", menu.getMenuDescription());
+        object.put("tags", menu.getTags());
+        object.put("views", menu.getViews());
+        object.put("rating", menu.getMenuRating());
+        object.put("writerNo", menu.getWriter().getUserNo());
+        object.put("writerId", menu.getWriter().getId());
+
+        return object;
+    }
+
 
     //메뉴 랜덤으로 골라서 json으로 반환
     public String randomMenu(){

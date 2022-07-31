@@ -39,6 +39,7 @@ function pageChange(number)
 // 페이지를 받아오는데 성공했다면 그걸 삽입해주는 함수
 function createList(object)
 {
+    resetSummary();
     if(object.array.length == 0)
     {
         $("#menuBox").html('<div class="menuList-row"><label style="text-decoration: italic; margin: 50px;">no result</label></div>');
@@ -50,7 +51,7 @@ function createList(object)
     for(let i=0; i < object.array.length; i++)
     {
         menuHtml +=
-        '<div class="menuList-row" onclick="getSummary()">'+
+        '<div class="menuList-row" onclick="getSummary(' + object.array[i].menuNo + ',' + i + ')">'+
         '	<a href="#" class="menu-title">' + object.array[i].menuComposition +'</a>'+
         '	<span class="menu-tags">'+ object.array[i].tags +'</span>'+
         '	<span class="menu-viewed">' +  object.array[i].views + '</span>'+
@@ -74,37 +75,54 @@ function createList(object)
 }
 
 let mode = false;
-let nowNo = 0;
-function getSummary(number)
+let nowNo = null;
+let nowIndex = null;
+
+function getSummary(number, index)
 {
-    if(mode == false)
+    if(nowNo == number) mode = false;
+    else mode = true;
+
+    if(mode == true)
     {
-        mode = true;
         nowNo = number;
+        $(".menuList-row:eq(" + nowIndex + ")").removeClass('clicked');
 
-            $.ajax({
-                url:
+        $.ajax({
+            url : "/menu/" + number,
+            method : "GET",
+            success : insertSummary,
+            error : e => alert(e.responseText)
+        });
 
-
-
-            });
-
-        $(".mainframe").toggleClass('smaller');
+        nowIndex = index;
+        $(".menuList-row:eq(" + index + ")").addClass('clicked');
+        $(".mainframe").addClass('smaller');
         $("#subframe").show();
     }
     else
     {
-        $("#subframe").hide();
+        $(".menuList-row:eq(" + index + ")").removeClass('clicked');
+        resetSummary();
     }
-    mode = !mode;
 
+}
+function resetSummary()
+{
+
+    $(".mainframe").removeClass('smaller');
+    $("#subframe").hide();
+    nowNo = null;
+    nowIndex = null;
 }
 
 function insertSummary(object)
 {
-
-
-
-
+    var subframe = $("#subframe").contents();
+    subframe.find("#title").text(object.composition);
+    subframe.find("#writer").text(object.writerId);
+    subframe.find("#tags").text(object.tags);
+    subframe.find("#calorie").text(object.calorie + "kcal");
+    subframe.find("#rating").text(object.rating);
 }
 
